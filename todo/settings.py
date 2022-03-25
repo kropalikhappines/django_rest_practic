@@ -45,10 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'users',
     'corsheaders',
-<<<<<<< HEAD
     'projectapp',
-=======
->>>>>>> master
+
 ]
 
 MIDDLEWARE = [
