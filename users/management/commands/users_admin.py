@@ -15,7 +15,7 @@ class Command(BaseCommand):
         user_count = options['count']
         User.objects.create_superuser('ars', 'ars@yandex.ru', 'Ars30394')
         for i in range(user_count):
-            User.objects.create_user(f'user{i}', f'user{i}@yandex.ru', 'Ars30394')
+            User.objects.create_user(f'user{i}', f'user{i}@yandex.ru', 'Ars30394', 'Alex')
         
 
         print('done')
