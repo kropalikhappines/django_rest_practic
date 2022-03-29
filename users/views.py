@@ -1,9 +1,9 @@
-from ast import Mod
 from rest_framework.viewsets import ModelViewSet
 from .models import User
-from .serializers import UserModelSerializer
+from .serializers import UserSerializer
 
 
 class UserModelViewSet(ModelViewSet):
+    serializer_class = UserSerializer
     queryset = User.objects.all()
-    serializer_class = UserModelSerializer
+    

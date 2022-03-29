@@ -1,20 +1,21 @@
-from django.contrib.auth.models import User
+from django.core.management.base import BaseCommand
+from users.models import User
 
-def createSuperUser(username, password, email = "", firstName = "", lastName = ""):
-    invalidInputs = ["", None]
 
-    if username.strip() in invalidInputs or password.strip() in invalidInputs:
-        return None
+class Command(BaseCommand):
+    help = 'Create superuser and some test users'
 
-    user = User(
-        username = username,
-        email = email,
-        first_name = firstName,
-        last_name = lastName,
-    )
-    user.set_password(password)
-    user.is_superuser = True
-    user.is_staff = True
-    user.save()
+    
+    def add_arguments(self, parser):
+        parser.add_argument('count', type=int)
 
-    return user
+
+    def handle(self, *args, **options):
+        User.objects.all().delete()
+        user_count = options['count']
+        User.objects.create_superuser('ars', 'ars@yandex.ru', 'Ars30394')
+        for i in range(user_count):
+            User.objects.create_user(f'user{i}', f'user{i}@yandex.ru', 'Ars30394', 'Alex')
+        
+
+        print('done')
