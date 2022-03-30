@@ -1,7 +1,10 @@
-from email.policy import default
-from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
+from .filters import ProjectFilter, ToDoFilter
+from rest_framework.response import Response
+from rest_framework import status
+
 
 from .models import Projects, ToDo
 from .serializers import ProjectModelSerializers, ToDoModelSerializers
@@ -9,13 +12,27 @@ from .serializers import ProjectModelSerializers, ToDoModelSerializers
 
 
 class ProjectsLimitOffsetPagination(LimitOffsetPagination):
-    default_limit = 2
+    default_limit = 10
+class ToDoLimitOffsetPagination(LimitOffsetPagination):
+    default_limit = 20
 class ProjectsModelViewSet(ModelViewSet):
     queryset = Projects.objects.all()
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     serializer_class = ProjectModelSerializers
+    filterset_class = ProjectFilter
     pagination_class = ProjectsLimitOffsetPagination
-
 
 class ToDoModelViewSet(ModelViewSet):
     queryset = ToDo.objects.all()
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     serializer_class = ToDoModelSerializers
+    filterset_class = ToDoFilter
+    pagination_class = ToDoLimitOffsetPagination
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.active_or_close = False
+        instance.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+        
