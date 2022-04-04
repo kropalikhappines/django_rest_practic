@@ -5,31 +5,52 @@ import './App.css';
 import UserList from './components/User';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
+import ProjectList from './components/Projects';
+import TodoList from './components/todo';
+import {HashRouter, Route, BrowserRouter} from 'react-router-dom'
 
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'users' : []
+      users : [],
+      projects : [],
+      todos : []
     }
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:8000/api/users/').then(response => {
-      const users = response.data
-        this.setState(
-        {
-            'users': response.data
-        }
-      )
-    }).catch(error => console.log(error))
+    axios.get('http://127.0.0.1:8000/api/users/')
+      .then(response => {
+        console.log(response.data.results)
+          this.setState({users: response.data.results})
+        }).catch(error => console.log(error))
+      
+    axios.get('http://127.0.0.1:8000/api/Projects/')
+      .then(response => {
+        console.log(response.data.results)
+          this.setState({projects: response.data.results})
+        }).catch(error => console.log(error))
+
+    axios.get('http://127.0.0.1:8000/api/ToDo/')
+      .then(response => {
+        console.log(response.data.results)
+          this.setState({todos: response.data.results})
+        }).catch(error => console.log(error))
   }
   render () {
     return (
       <div>
         <Menu />
-        <UserList users={this.state.users} />
+        <BrowserRouter>
+          <Route exact path='/' component={() => <UserList users={this.state.users} />}/>
+          <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />}/>
+          <Route exact path='/todo' component={() => <TodoList todos={this.state.todos} />}/>
+
+        </BrowserRouter>
+
+
         <Footer />
       </div>
     );
