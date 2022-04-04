@@ -7,7 +7,8 @@ import Menu from './components/Menu';
 import Footer from './components/Footer';
 import ProjectList from './components/Projects';
 import TodoList from './components/todo';
-import {HashRouter, Route, BrowserRouter} from 'react-router-dom'
+import NotFound404 from './components/NotFound';
+import {HashRouter, Route, BrowserRouter, Link, Switch, Redirect} from 'react-router-dom'
 
 
 class App extends React.Component {
@@ -44,10 +45,30 @@ class App extends React.Component {
       <div>
         <Menu />
         <BrowserRouter>
-          <Route exact path='/' component={() => <UserList users={this.state.users} />}/>
-          <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />}/>
-          <Route exact path='/todo' component={() => <TodoList todos={this.state.todos} />}/>
+          <nav>
+            <ul>
+              <li><Link to='/'>Users</Link></li>
+            </ul>
+            <ul>
+              <li><Link to='/projects'>Projects</Link></li>
+            </ul>
+            <ul>
+              <li><Link to='/todo'>Todo</Link></li>
+            </ul>
+          </nav>
 
+          <Switch>
+            <Route exact path='/' component={() => <UserList users={this.state.users} />}/>
+            <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />}/>
+            <Route exact path='/todo' component={() => <TodoList todos={this.state.todos} />}/>
+            {/* <Route path='/project/:id'>
+              <ProjectInfo projects={this.state.projects}/>
+            </Route> */}
+
+
+            <Redirect from='/project' to='/projects'></Redirect>
+            <Route component={NotFound404}/>
+          </Switch>
         </BrowserRouter>
 
 

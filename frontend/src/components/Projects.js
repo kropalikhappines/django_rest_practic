@@ -1,7 +1,8 @@
 import React from 'react'
-
+import { useParams } from 'react-router-dom'
 
 const ProjectItem = ({project}) => {
+    
     return (
         <tr>
             <td>
@@ -10,9 +11,6 @@ const ProjectItem = ({project}) => {
             <td>
                 {project.repo_proj}
             </td>
-
-            
-            
         </tr>
     )
 }
@@ -32,6 +30,9 @@ const ProjectList = ({projects}) => {
         </table>
     )
 }
+
+
+
 
 
 export default ProjectList
