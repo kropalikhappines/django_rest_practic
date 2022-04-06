@@ -1,22 +1,29 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 const ProjectItem = ({project}) => {
-    
+    let lin = `/project/${project.id}`
     return (
         <tr>
             <td>
-                {project.name_proj}
+                <Link to={lin}>{project.name_proj}</Link>
             </td>
             <td>
                 {project.repo_proj}
             </td>
+            {/* <td>
+                {project.users_proj}
+            </td> */}
         </tr>
     )
 }
 
 
 const ProjectList = ({projects}) => {
+    // console.log(projects)
+    // let {id} = useParams()
+    // let filter_item = projects.filter((project => project.users_proj.includes(parseInt(id))))
+
     return (
         <table>
             <th>
@@ -30,7 +37,6 @@ const ProjectList = ({projects}) => {
         </table>
     )
 }
-
 
 
 
