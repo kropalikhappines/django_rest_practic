@@ -16,7 +16,7 @@ class Projects(models.Model):
 class ToDo(models.Model):
     active_or_close = models.BooleanField(default=True)
     todo_proj = models.ForeignKey(Projects, on_delete=models.CASCADE)
-    todo_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    todo_user = models.ForeignKey(User, on_delete=models.PROTECT)
     text_proj = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True) 
     update_at = models.DateTimeField(auto_now=True)
