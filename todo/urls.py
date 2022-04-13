@@ -19,6 +19,9 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 from projectapp.views import ProjectsModelViewSet, ToDoModelViewSet
 from users.views import UserCustomViewSet
+# from rest_framework.authtoken import views
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+
 
 router = DefaultRouter()
 router.register('Projects', ProjectsModelViewSet)
@@ -30,7 +33,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include(router.urls)),
- 
+    # Tokens
+    path('api/token/', TokenObtainPairView.as_view()),
+    path('api/token/refresh/', TokenRefreshView.as_view()),
+    path('api/token/verify/', TokenVerifyView.as_view()),
 
 
 ]
