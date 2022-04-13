@@ -9,8 +9,9 @@ import ProjectList from './components/Projects';
 import TodoList from './components/todo';
 import NotFound404 from './components/NotFound';
 import ProjItemList from './components/ProjectDeateil';
+import LoginForm from './components/Auth';
 import {HashRouter, Route, BrowserRouter, Link, Switch, Redirect} from 'react-router-dom'
-
+import Cookies from 'universal-cookie'
 
 class App extends React.Component {
   constructor(props) {
@@ -19,31 +20,106 @@ class App extends React.Component {
       users : [],
       projects : [],
       todos : [],
+      token: '',
+      username: '',
     }
   }
 
 
-  componentDidMount() {
-    axios.get('http://127.0.0.1:8000/api/users/')
+  set_token(token, username) {
+    const cookies = new Cookies()
+    
+    // console.log(cookies.set('usernam'))
+    cookies.set('username', username)
+    cookies.set('token', token)
+    console.log(cookies)
+    this.setState({'token': token,},()=>this.load_data())
+    this.setState({'username': username},()=>this.load_data())
+  }
+
+
+  get_token(username, password){
+    // const user = username
+    // console.log(user)
+
+    axios.post('http://127.0.0.1:8000/api/token/', {'username': username, 'password': password})
+    .then(response => {
+      const user = username
+      this.set_token(response.data['access'], user)
+    }).catch(error => alert('Wrong login or password')) 
+    // return user
+
+  }
+  
+
+  is_auth(){
+    return !!this.state.token
+  }
+
+
+  get_headers(){
+    let headers = {
+      'Content-Type': 'applications/json'
+    }
+    // console.log(this.is_auth())
+    if(this.is_auth()){
+      headers['Authorization'] = `Bearer ${this.state.token}`
+    }
+    return headers
+  }
+
+
+  logout() {
+    this.set_token('')
+
+  }
+
+
+  get_token_from_cookies() {
+    const cookies = new Cookies()
+    const token = cookies.get('token')
+    const usr = cookies.get('username')
+    this.setState({'token': token}, ()=>this.load_data())
+    this.setState({'username': usr}, ()=>this.render())
+  }
+
+
+  load_data() {
+    const usr = this.state.username
+    console.log(usr)
+    const headers = this.get_headers()
+    axios.get('http://127.0.0.1:8000/api/users/', {headers})
       .then(response => {
         // console.log(response.data.results)
           this.setState({users: response.data.results})
         }).catch(error => console.log(error))
-      
-    axios.get('http://127.0.0.1:8000/api/Projects/')
+    
+    axios.get('http://127.0.0.1:8000/api/Projects/', {headers})
       .then(response => {
         // console.log(response.data.results)
           this.setState({projects: response.data.results})
         }).catch(error => console.log(error))
 
-    axios.get('http://127.0.0.1:8000/api/ToDo/')
+    axios.get('http://127.0.0.1:8000/api/ToDo/', {headers})
       .then(response => {
         // console.log(response.data.results)
           this.setState({todos: response.data.results})
         }).catch(error => console.log(error))
-    
+
   }
+
+
+  
+
+
+  componentDidMount() {
+    this.get_token_from_cookies()
+
+  }
+
+
   render () {
+    console.log(this.state.usr)
     return (
       <div>
         <Menu />
@@ -58,14 +134,24 @@ class App extends React.Component {
             <ul>
               <li><Link to='/todo'>Todo</Link></li>
             </ul>
+            <ul>
+              <li>
+                {this.is_auth()? <button onClick={()=> this.logout()}>{this.state.username} Logout</button>:
+                <Link to='/login'>Login</Link>}
+              </li>
+            </ul>
           </nav>
 
           <Switch>
             <Route exact path='/' component={() => <UserList users={this.state.users} />}/>
             <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />}/>
             <Route exact path='/todo' component={() => <TodoList todos={this.state.todos} />}/>
+            
+            
             <Route exact path='/project/:id' component={() => <ProjItemList projects={this.state.projects} users={this.state.users} />}/>
-{/* 
+
+            <Route exact path='/login' component={() => <LoginForm get_token={(username,password)=> this.get_token(username,password)} />}/>
+{/*         
             <Route path='/projects/:id'>
               <ProjItemList projects={this.state.projects}/>
             </Route> */}
