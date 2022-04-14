@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from users.models import User
+from users.models import UserViewSet
 
 
 class Command(BaseCommand):
@@ -11,11 +11,11 @@ class Command(BaseCommand):
 
 
     def handle(self, *args, **options):
-        User.objects.all().delete()
+        UserViewSet.objects.all().delete()
         user_count = options['count']
-        User.objects.create_superuser('ars', 'ars@yandex.ru', 'Ars30394')
+        UserViewSet.objects.create_superuser('ars', 'ars@yandex.ru', 'Ars30394')
         for i in range(user_count):
-            User.objects.create_user(f'user{i}', f'user{i}@yandex.ru', 'Ars30394')
+            UserViewSet.objects.create_user(f'user{i}', f'user{i}@yandex.ru', 'Ars30394')
         
 
         print('done')
