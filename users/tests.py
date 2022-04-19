@@ -93,7 +93,13 @@ class TestProjectsViewSet(APITestCase):
         self.email = 'admin1234@yandex.ru'
 
         self.data_user = {'username': 'alex123', 'first_name': 'Alex', 'last_name': 'Pushkin', 'password': 'Alex1234', 'email': 'alex1234@yandex.ru'}
+        self.data_user2 = {'username': 'grisha123', 'first_name': 'Grisha', 'last_name': 'Celov', 'password': 'Alex1234', 'email': 'grisha1234@yandex.ru'}
         self.user = UserViewSet.objects.create(**self.data_user)
+        self.user2 = UserViewSet.objects.create(**self.data_user2)
+        self.auth = UserViewSet.objects.get(id=self.user.id)
+        self.auth2 = UserViewSet.objects.get(id=self.user2.id)
+        self.authAll = [self.auth.id, self.auth2.id]
+        print(self.authAll)
         self.data = {'name_proj': 'proj#1', 'repo_proj': 'https://github.com/kropalik_happines/'}
         self.data_put = {'name_proj': 'proj#12', 'repo_proj': 'https://github.com/kropalik_happines/1'}
 
@@ -108,12 +114,12 @@ class TestProjectsViewSet(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-    # def test_put_admin(self):
-    #     proj = Projects.objects.create(**self.data)
-    #     print(self.data_user)
-    #     self.client.login(username=self.name, password=self.password)
-    #     response = self.client.put(f'{self.url}{proj.id}/', {'name_proj': 'proj#12', 'repo_proj': 'https://github.com/kropalik_happines/1', 'users_proj': self.data_user})
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_put_admin(self):
+        proj = Projects.objects.create(**self.data)
+        self.client.login(username=self.name, password=self.password)
+        response = self.client.put(f'{self.url}{proj.id}/', 
+        {'name_proj': 'proj#12', 'repo_proj': 'https://github.com/kropalik_happines/1', 'users_proj': self.authAll})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
     
     def tearDown(self) -> None:
         pass
