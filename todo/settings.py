@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'django_filters',
     'djoser',
     'rest_framework_simplejwt',
-
+    'drf_yasg',
     'rest_framework_jwt',
     'rest_framework_json_api',
 

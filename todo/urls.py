@@ -21,6 +21,20 @@ from projectapp.views import ProjectsModelViewSet, ToDoModelViewSet
 from users.views import UserCustomViewSet
 # from rest_framework.authtoken import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title='todo',
+        default_version='0.2',
+        description='my projects',
+        contact=openapi.Contact(email='ars@yandex.ru'),
+        license=openapi.License(name='MT')
+    ),
+    public=True,
+)
 
 
 router = DefaultRouter()
@@ -38,5 +52,6 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view()),
     path('api/token/verify/', TokenVerifyView.as_view()),
     path('api/<str:version>/users/', UserCustomViewSet.as_view({'get': 'list'})),
+    path('swagger/', schema_view.with_ui('swagger')),
 
 ]
