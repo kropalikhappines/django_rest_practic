@@ -7,7 +7,7 @@ from urllib import response
 
 from django.test import TestCase
 from rest_framework import status
-from rest_framework.test import APIRequestFactory, APIClient, force_authenticate, APISimpleTestCase, APITestCase
+from rest_framework.test import APIRequestFactory, APIClient, force_authenticate, APISimpleTestCase, APITestCase, CoreAPIClient
 from mixer.backend.django import mixer
 # from django.contrib.auth.models import User
 
@@ -124,5 +124,34 @@ class TestProjectsViewSet(APITestCase):
         self.assertEqual(proj_.name_proj, 'proj#12')
         self.client.logout()
     
+
+    def test_put_mixer(self):
+        proj = mixer.blend(Projects)
+        self.client.login(username=self.name, password=self.password)
+        response = self.client.put(f'{self.url}{proj.id}/', 
+        {'name_proj': 'proj#12', 'repo_proj': 'https://github.com/kropalik_happines/1', 'users_proj': self.authAll})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def tearDown(self) -> None:
         pass
+
+
+
+# class TestProjectsCore(CoreAPIClient):
+
+#     def setUp(self) -> None:
+#         self.data = {'username': 'alex123', 'first_name': 'Alex', 'last_name': 'Pushkin', 'password': 'Alex1234', 'email': 'alex1234@yandex.ru'}
+
+        
+    
+
+#     def test_core_api(self):
+#         self.client = CoreAPIClient()
+#         schema = client.get('http://127.0.0.1:8000/api/users/')
+#         print(schema)
+        
+
+
+
+#     def tearDown(self) -> None:
+#         pass
