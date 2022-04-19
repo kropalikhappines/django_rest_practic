@@ -120,6 +120,9 @@ class TestProjectsViewSet(APITestCase):
         response = self.client.put(f'{self.url}{proj.id}/', 
         {'name_proj': 'proj#12', 'repo_proj': 'https://github.com/kropalik_happines/1', 'users_proj': self.authAll})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        proj_ = Projects.objects.get(id=proj.id)
+        self.assertEqual(proj_.name_proj, 'proj#12')
+        self.client.logout()
     
     def tearDown(self) -> None:
         pass
