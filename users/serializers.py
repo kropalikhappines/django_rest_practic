@@ -1,10 +1,10 @@
 from rest_framework.serializers import ModelSerializer, HyperlinkedModelSerializer
-from .models import User
+from .models import UserViewSet
 
 
 class UserSerializer(ModelSerializer):
     class Meta:
-        model = User
+        model = UserViewSet
         fields = ('username', 'first_name', 'last_name', 'email')
 
         
