@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework_jwt',
     'rest_framework_json_api',
+    'graphene_django',
 
 ]
 
@@ -199,4 +200,9 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+
+GRAPHENE = {
+    'SCHEMA': 'todo.schema.schema'
 }
