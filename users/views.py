@@ -6,7 +6,7 @@ from rest_framework import mixins, viewsets
 # from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from .models import UserViewSet
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserSerializerIsStaff
 
 
 # class UserModelView(ViewSet):
@@ -29,6 +29,11 @@ from .serializers import UserSerializer
 
 class UserCustomViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = UserViewSet.objects.all()
-    serializer_class = UserSerializer
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
+
+
+    def get_serializer_class(self):
+        if self.request.version == '0.2':
+            return UserSerializerIsStaff
+        return UserSerializer
 
