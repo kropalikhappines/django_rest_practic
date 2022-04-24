@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link, useParams } from 'react-router-dom'
 
 
 const TodoItem = ({todo, deleteTodo}) => {
@@ -20,18 +21,22 @@ const TodoItem = ({todo, deleteTodo}) => {
 
 const TodoList = ({todos, deleteTodo}) => {
     return (
-        <table>
-            <tr>
-                <th>Id proj</th>
-                <th>Id user</th>
-                <th>text_proj</th>
+        <div>
+            <table>
+                <tr>
+                    <th>Id proj</th>
+                    <th>Id user</th>
+                    <th>text_proj</th>
 
-                <th>Created todo</th>
-                <th></th>
+                    <th>Created todo</th>
+                    <th></th>
 
-            </tr>
-            {todos.map((todo) => <TodoItem todo={todo} deleteTodo={deleteTodo}/>)}
-        </table>
+                </tr>
+                {todos.map((todo) => <TodoItem todo={todo} deleteTodo={deleteTodo}/>)}
+            </table>
+            <Link to='/todo/create'>Create</Link>
+        </div>
+
     )
 }
 

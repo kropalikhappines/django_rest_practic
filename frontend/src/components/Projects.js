@@ -24,16 +24,20 @@ const ProjectList = ({projects, deleteProjects}) => {
     // let filter_item = projects.filter((project => project.users_proj.includes(parseInt(id))))
 
     return (
-        <table>
-            <th>
-                Project Name
-            </th>
-            <th>
-                URL Project
-            </th>
- 
-            {projects.map((project) => <ProjectItem project={project} deleteProjects={deleteProjects}/>)}
-        </table>
+        <div>
+            <table>
+                <th>
+                    Project Name
+                </th>
+                <th>
+                    URL Project
+                </th>
+                <th></th>
+    
+                {projects.map((project) => <ProjectItem project={project} deleteProjects={deleteProjects}/>)}
+            </table>
+            <Link to='/Projects/create'>Create</Link>
+        </div>
     )
 }
 

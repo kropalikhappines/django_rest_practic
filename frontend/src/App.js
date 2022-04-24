@@ -10,6 +10,8 @@ import TodoList from './components/todo';
 import NotFound404 from './components/NotFound';
 import ProjItemList from './components/ProjectDeateil';
 import LoginForm from './components/Auth';
+import ProjectForm from './components/ProjectForm';
+import ToDoForm from './components/ToDoForm';
 import {HashRouter, Route, BrowserRouter, Link, Switch, Redirect} from 'react-router-dom'
 import Cookies from 'universal-cookie'
 
@@ -59,7 +61,9 @@ class App extends React.Component {
 
   get_headers(){
     let headers = {
-      'Content-Type': 'applications/json'
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+
     }
     // console.log(this.is_auth())
     if(this.is_auth()){
@@ -101,7 +105,7 @@ class App extends React.Component {
 
     axios.get('http://127.0.0.1:8000/api/ToDo/', {headers})
       .then(response => {
-        console.log(response.data.results.filter((todo) => todo.active_or_close !== false))
+        // console.log(response.data.results.filter((todo) => todo.active_or_close !== false))
           this.setState({todos: response.data.results.filter((todo) => todo.active_or_close !== false)})
         
         }).catch(error => console.log(error))
@@ -129,12 +133,34 @@ class App extends React.Component {
         
         'projects': this.state.projects.filter((project) => project.id !== id)
     })
-  console.log(id)
+  // console.log(id)
   }).catch(error => console.log(error))
-    console.log(id)
-
+    // console.log(id)
   }
 
+  createProject(name_proj, repo_proj, users_proj) {
+    const headers = this.get_headers()
+    const data = {'name_proj': name_proj, 'repo_proj': repo_proj, 'users_proj': users_proj}
+    console.log(data)
+  
+    axios.post(`http://127.0.0.1:8000/api/Projects/`, data, {headers})
+      .then(response => {
+        this.load_data()
+      }).catch(error => console.log(error))
+      this.setState({projects:[]})
+  }
+
+  createTodo(todo_proj, todo_user, text_proj) {
+    const headers = this.get_headers()
+    const data = {'todo_proj': todo_proj, 'todo_user': todo_user, 'text_proj': text_proj}
+    // console.log(data)
+  
+    axios.post(`http://127.0.0.1:8000/api/ToDo/`, data, {headers})
+      .then(response => {
+        this.load_data()
+      }).catch(error => console.log(error))
+      this.setState({todos:[]})
+  }
 
   
 
@@ -172,9 +198,12 @@ class App extends React.Component {
             <Route exact path='/' component={() => <UserList users={this.state.users} />}/>
             <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects}
                                                                           deleteProjects={(id) => this.deleteProjects(id)} />}/>
+            <Route exact path='/Projects/create' component={() => <ProjectForm users = {this.state.users} createProject={(name_proj, repo_proj, users_proj) => this.createProject(name_proj, repo_proj, users_proj)}/>}/>
+
             <Route exact path='/todo' component={() => <TodoList todos={this.state.todos}
                                                                           deleteTodo={(id) => this.deleteTodo(id)} />}/>
-            
+            <Route exact path='/todo/create' component={() => <ToDoForm createTodo={(todo_proj, todo_user, text_proj) => this.createTodo(todo_proj, todo_user, text_proj)}/>}/>
+
             
             <Route exact path='/project/:id' component={() => <ProjItemList projects={this.state.projects} users={this.state.users} />}/>
 
