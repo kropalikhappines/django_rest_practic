@@ -96,7 +96,7 @@ class App extends React.Component {
     axios.get('http://127.0.0.1:8000/api/Projects/', {headers})
       .then(response => {
         // console.log(response.data.results)
-          this.setState({projects: response.data.results})
+          this.setState({projects: response.data.results.filter((project) => project.active_or_close !== false)})
         }).catch(error => console.log(error))
 
     axios.get('http://127.0.0.1:8000/api/ToDo/', {headers})
@@ -120,6 +120,18 @@ class App extends React.Component {
   // console.log(id)
   }).catch(error => console.log(error))
     // console.log(id)
+
+  }
+  deleteProjects(id) {
+    const headers = this.get_headers()
+    axios.delete(`http://127.0.0.1:8000/api/Projects/${id}`, {headers}).then(response => {
+      this.setState( {
+        
+        'projects': this.state.projects.filter((project) => project.id !== id)
+    })
+  console.log(id)
+  }).catch(error => console.log(error))
+    console.log(id)
 
   }
 
@@ -158,7 +170,8 @@ class App extends React.Component {
 
           <Switch>
             <Route exact path='/' component={() => <UserList users={this.state.users} />}/>
-            <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />}/>
+            <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects}
+                                                                          deleteProjects={(id) => this.deleteProjects(id)} />}/>
             <Route exact path='/todo' component={() => <TodoList todos={this.state.todos}
                                                                           deleteTodo={(id) => this.deleteTodo(id)} />}/>
             
