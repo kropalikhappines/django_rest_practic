@@ -25,10 +25,7 @@ from users.views import UserCustomViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-<<<<<<< HEAD
 from graphene_django.views import GraphQLView
-=======
->>>>>>> bbd672497e16a75f8387e20a5c7290de2759e186
 
 
 schema_view = get_schema_view(
@@ -59,9 +56,6 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view()),
     path('api/<str:version>/users/', UserCustomViewSet.as_view({'get': 'list'})),
     path('swagger/', schema_view.with_ui('swagger')),
-<<<<<<< HEAD
     path('graphql/', GraphQLView.as_view(graphiql=True)),
-=======
->>>>>>> bbd672497e16a75f8387e20a5c7290de2759e186
 
 ]
