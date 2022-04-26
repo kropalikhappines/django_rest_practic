@@ -29,8 +29,7 @@ class ProjectForm extends React.Component {
             })
             return;
         }
-        console.log(event.target.selectedOptions.item(0).index)
-        console.log(event.target.selectedOptions)
+
 
         let users = []
         for(let i = 0; i < event.target.selectedOptions.length;i++){
