@@ -16,12 +16,12 @@ Including another URLconf
 
 from django.urls import path, include
 from django.contrib import admin
-from django.urls import path
 import graphql
 from rest_framework.routers import DefaultRouter
 from projectapp.views import ProjectsModelViewSet, ToDoModelViewSet
 from users.views import UserCustomViewSet
 # from rest_framework.authtoken import views
+from django.views.generic import TemplateView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -57,5 +57,6 @@ urlpatterns = [
     path('api/<str:version>/users/', UserCustomViewSet.as_view({'get': 'list'})),
     path('swagger/', schema_view.with_ui('swagger')),
     path('graphql/', GraphQLView.as_view(graphiql=True)),
+    path('', TemplateView.as_view(template_name='index.html'))
 
 ]

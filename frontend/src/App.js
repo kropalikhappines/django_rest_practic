@@ -143,6 +143,22 @@ class App extends React.Component {
     // console.log(id)
   }
 
+
+  putProjects(id) {
+    const headers = this.get_headers()
+    console.log(id)
+    axios.put(`http://127.0.0.1:8000/api/Projects/${id}`, {headers})
+    .then(response => {
+      console.log(response.data.results)
+
+      this.setState( {
+        
+        'projects': this.state.projects.filter((project) => project.id !== id)
+    })
+  }).catch(error => console.log(error))
+  }
+
+
   createProject(name_proj, repo_proj, users_proj) {
     const headers = this.get_headers()
     const data = {'name_proj': name_proj, 'repo_proj': repo_proj, 'users_proj': users_proj}
@@ -211,7 +227,8 @@ class App extends React.Component {
             <Route exact path='/todo/create' component={() => <ToDoForm projects = {this.state.projects} user = {this.state.username} userId = {this.state.usernameId} createTodo={(todo_proj, todo_user, text_proj) => this.createTodo(todo_proj, todo_user, text_proj)}/>}/>
 
             
-            <Route exact path='/project/:id' component={() => <ProjItemList projects={this.state.projects} users={this.state.users} />}/>
+            <Route exact path='/project/:id' component={() => <ProjItemList projects={this.state.projects} users={this.state.users} 
+                                                                          putProjects={(id) => this.putProjects(id)}/>}/>
 
             <Route exact path='/login' component={() => <LoginForm get_token={(username,password)=> this.get_token(username,password)} />}/>
 {/*         

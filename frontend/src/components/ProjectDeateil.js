@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 
-const ProjItem = ({project, users}) => {
+const ProjItem = ({project, users, putProjects}) => {
     
     return (
         <tr>
@@ -18,13 +18,15 @@ const ProjItem = ({project, users}) => {
             <div>
                 URL Project:  <a href={project.repo_proj}>{project.repo_proj}</a>
             </div>
+            <div><button onClick={()=> putProjects(project.id)} type="button">Put</button></div>
+
             
         </tr>
     )
 }
 
 
-const ProjItemList = ({projects}) => {
+const ProjItemList = ({projects, putProjects}) => {
     let {id} = useParams()
     // console.log(projects)
     let filter_item = projects.filter((project => parseInt(project.id) === parseInt(id)))
@@ -44,7 +46,7 @@ const ProjItemList = ({projects}) => {
         //     <div>
         //         URL Project:
         //     </div> */}
-            {filter_item.map((project) => <ProjItem project={project}/>)}
+            {filter_item.map((project) => <ProjItem project={project} putProjects={putProjects}/>)}
         </div>
     )
 }

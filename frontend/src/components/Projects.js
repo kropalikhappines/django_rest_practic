@@ -33,6 +33,7 @@ const ProjectList = ({projects, deleteProjects}) => {
                     URL Project
                 </th>
                 <th></th>
+                <th></th>
     
                 {projects.map((project) => <ProjectItem project={project} deleteProjects={deleteProjects}/>)}
             </table>
