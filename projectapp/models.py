@@ -5,6 +5,7 @@ from users.models import UserViewSet
 # Create your models here.
 
 class Projects(models.Model):
+    active_or_close = models.BooleanField(default=True)
     name_proj = models.CharField(max_length=64, unique=True)
     repo_proj = models.URLField(null=True, max_length=200, unique=True)
     users_proj = models.ManyToManyField(UserViewSet)
