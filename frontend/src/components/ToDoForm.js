@@ -16,7 +16,7 @@ class ToDoForm extends React.Component {
     }
 
 
-    handleAuthorChange(self, event){
+    handleAuthorChange(event){
         if(!event.target.selectedOptions){
             this.setState({
                 'project':[]
@@ -25,28 +25,36 @@ class ToDoForm extends React.Component {
         }
 
 
-        self.proj = event.target.selectedOptions.item(0).value
-        console.log(event.target.selectedOptions.item(0).value)
-        let projects = []
-        for(let i = 0; i < event.target.selectedOptions.length;i++){
-            projects.push(event.target.selectedOptions.item(i).value)
-            // console.log(event.target.selectedOptions.item(0).value)
-        }
+        // let proj = event.target.selectedOptions.item(0).value
+        // console.log(event.target.selectedOptions.item(0).value)
+        // let projects = []
+        // for(let i = 0; i < event.target.selectedOptions.length;i++){
+        //     projects.push(event.target.selectedOptions.item(i).value)
+        //     // console.log(event.target.selectedOptions.item(0).value)
+        // }
         this.setState({
-            'project': projects
+            'project': event.target.selectedOptions.item(0).value
         })
-        console.log(self.proj)
+        
+        // console.log(this.state.project)
     }
 
     
     
 
     handleSubmit(event) {
-        console.log(this.self.projects)
-        // console.log(this.state.todo_user)
-        // console.log(this.state.text_proj)
-        this.props.createTodo(this.state.todo_proj, this.state.todo_user, this.state.text_proj)
-        event.preventDefault()
+        console.log(this.state.project)
+        console.log(this.props.userId)
+        console.log(this.state.text_proj)
+        if(this.state.project === undefined){
+            this.props.createTodo(1, this.props.userId, this.state.text_proj)
+            console.log('Default 1')
+            event.preventDefault()
+        } else if (this.state.project !== undefined){
+            this.props.createTodo(this.state.project, this.props.userId, this.state.text_proj)
+            console.log('Take')
+            event.preventDefault()
+        }
     }
 
     render() {

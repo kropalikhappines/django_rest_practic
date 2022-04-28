@@ -41,8 +41,6 @@ class App extends React.Component {
 
 
   get_token(username, password){
-    // const user = username
-    // console.log(user)
 
     axios.post('http://127.0.0.1:8000/api/token/', {'username': username, 'password': password})
     .then(response => {
@@ -89,12 +87,19 @@ class App extends React.Component {
 
 
   load_data() {
-    const usr = this.state.username
     const headers = this.get_headers()
+    // console.log(headers)
     axios.get('http://127.0.0.1:8000/api/users/', {headers})
       .then(response => {
         // console.log(response.data.results)
           this.setState({users: response.data.results})
+          // this.setState({userId: response.data.results})
+        for(let i = 0; i < response.data.results.length;i++){
+          if(response.data.results[i].username === this.state.username){
+            this.setState({'usernameId': i}, ()=>this.render())
+          }
+        }
+          // console.log(response.data.results)
         }).catch(error => console.log(error))
     
     axios.get('http://127.0.0.1:8000/api/Projects/', {headers})
@@ -141,7 +146,7 @@ class App extends React.Component {
   createProject(name_proj, repo_proj, users_proj) {
     const headers = this.get_headers()
     const data = {'name_proj': name_proj, 'repo_proj': repo_proj, 'users_proj': users_proj}
-    console.log(data)
+    // console.log(data)
   
     axios.post(`http://127.0.0.1:8000/api/Projects/`, data, {headers})
       .then(response => {
@@ -152,8 +157,8 @@ class App extends React.Component {
 
   createTodo(todo_proj, todo_user, text_proj) {
     const headers = this.get_headers()
-    const data = {'todo_proj': todo_proj, 'todo_user': todo_user, 'text_proj': text_proj}
-    // console.log(data)
+    const data = {'todo_proj': todo_proj, 'todo_user': todo_user + 1, 'text_proj': text_proj}
+    console.log(data)
   
     axios.post(`http://127.0.0.1:8000/api/ToDo/`, data, {headers})
       .then(response => {
@@ -172,6 +177,7 @@ class App extends React.Component {
 
 
   render () {
+    // console.log(this.state.usernameId)
     return (
       <div>
         <Menu />
@@ -202,7 +208,7 @@ class App extends React.Component {
 
             <Route exact path='/todo' component={() => <TodoList todos={this.state.todos}
                                                                           deleteTodo={(id) => this.deleteTodo(id)} />}/>
-            <Route exact path='/todo/create' component={() => <ToDoForm projects = {this.state.projects} user = {this.state.username} createTodo={(todo_proj, todo_user, text_proj) => this.createTodo(todo_proj, todo_user, text_proj)}/>}/>
+            <Route exact path='/todo/create' component={() => <ToDoForm projects = {this.state.projects} user = {this.state.username} userId = {this.state.usernameId} createTodo={(todo_proj, todo_user, text_proj) => this.createTodo(todo_proj, todo_user, text_proj)}/>}/>
 
             
             <Route exact path='/project/:id' component={() => <ProjItemList projects={this.state.projects} users={this.state.users} />}/>
