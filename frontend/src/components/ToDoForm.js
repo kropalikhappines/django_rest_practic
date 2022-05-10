@@ -48,11 +48,11 @@ class ToDoForm extends React.Component {
         console.log(this.state.text_proj)
         if(this.state.project === undefined){
             this.props.createTodo(1, this.props.userId, this.state.text_proj)
-            console.log('Default 1')
+            // console.log('Default 1')
             event.preventDefault()
         } else if (this.state.project !== undefined){
             this.props.createTodo(this.state.project, this.props.userId, this.state.text_proj)
-            console.log('Take')
+            // console.log('Take')
             event.preventDefault()
         }
     }

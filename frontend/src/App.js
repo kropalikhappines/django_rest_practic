@@ -15,6 +15,7 @@ import ToDoForm from './components/ToDoForm';
 import {HashRouter, Route, BrowserRouter, Link, Switch, Redirect} from 'react-router-dom'
 import Cookies from 'universal-cookie'
 
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -42,7 +43,7 @@ class App extends React.Component {
 
   get_token(username, password){
 
-    axios.post('http://127.0.0.1:8000/api/token/', {'username': username, 'password': password})
+    axios.post('http://0.0.0.0:8080/api/token/', {'username': username, 'password': password})
     .then(response => {
       const user = username
       this.set_token(response.data['access'], user)
@@ -89,7 +90,7 @@ class App extends React.Component {
   load_data() {
     const headers = this.get_headers()
     // console.log(headers)
-    axios.get('http://127.0.0.1:8000/api/users/', {headers})
+    axios.get('http://0.0.0.0:8080/api/users/', {headers})
       .then(response => {
         // console.log(response.data.results)
           this.setState({users: response.data.results})
@@ -102,13 +103,13 @@ class App extends React.Component {
           // console.log(response.data.results)
         }).catch(error => console.log(error))
     
-    axios.get('http://127.0.0.1:8000/api/Projects/', {headers})
+    axios.get('http://0.0.0.0:8080/api/Projects/', {headers})
       .then(response => {
         // console.log(response.data.results)
           this.setState({projects: response.data.results.filter((project) => project.active_or_close !== false)})
         }).catch(error => console.log(error))
 
-    axios.get('http://127.0.0.1:8000/api/ToDo/', {headers})
+    axios.get('http://0.0.0.0:8080/api/ToDo/', {headers})
       .then(response => {
         // console.log(response.data.results.filter((todo) => todo.active_or_close !== false))
           this.setState({todos: response.data.results.filter((todo) => todo.active_or_close !== false)})
@@ -121,7 +122,7 @@ class App extends React.Component {
   // delete and create todo 
   deleteTodo(id) {
     const headers = this.get_headers()
-    axios.delete(`http://127.0.0.1:8000/api/ToDo/${id}`, {headers}).then(response => {
+    axios.delete(`http://0.0.0.0:8080/api/ToDo/${id}`, {headers}).then(response => {
       this.setState( {
         
         'todos': this.state.todos.filter((todo) => todo.id !== id)
@@ -133,7 +134,7 @@ class App extends React.Component {
   }
   deleteProjects(id) {
     const headers = this.get_headers()
-    axios.delete(`http://127.0.0.1:8000/api/Projects/${id}`, {headers}).then(response => {
+    axios.delete(`http://0.0.0.0:8080/api/Projects/${id}`, {headers}).then(response => {
       this.setState( {
         
         'projects': this.state.projects.filter((project) => project.id !== id)
@@ -147,7 +148,7 @@ class App extends React.Component {
   putProjects(id) {
     const headers = this.get_headers()
     console.log(id)
-    axios.put(`http://127.0.0.1:8000/api/Projects/${id}`, {headers})
+    axios.put(`http://0.0.0.0:8080/api/Projects/${id}`, {headers})
     .then(response => {
       console.log(response.data.results)
 
@@ -164,7 +165,7 @@ class App extends React.Component {
     const data = {'name_proj': name_proj, 'repo_proj': repo_proj, 'users_proj': users_proj}
     // console.log(data)
   
-    axios.post(`http://127.0.0.1:8000/api/Projects/`, data, {headers})
+    axios.post(`http://0.0.0.0:8080/api/Projects/`, data, {headers})
       .then(response => {
         this.load_data()
       }).catch(error => console.log(error))
@@ -176,7 +177,7 @@ class App extends React.Component {
     const data = {'todo_proj': todo_proj, 'todo_user': todo_user + 1, 'text_proj': text_proj}
     console.log(data)
   
-    axios.post(`http://127.0.0.1:8000/api/ToDo/`, data, {headers})
+    axios.post(`http://0.0.0.0:8080/api/ToDo/`, data, {headers})
       .then(response => {
         this.load_data()
       }).catch(error => console.log(error))
